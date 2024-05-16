@@ -1,0 +1,30 @@
+.game_lose.show,
+			.game_win.show {
+			  display: block;
+			}
+			.game_lose .inner,
+			.game_win .inner {
+			  position: absolute;
+			  width: 500px;
+			  left: 0;
+			  right: 0;
+			  margin: auto;
+			  top: 50%;
+			  transform: translateY(-50%);
+			}
+			.game_lose .inner p,
+			.game_win .inner p {
+			  font-size: 12px;
+			  line-height: 20px;
+			}
+			
+			#app {
+			  background: url("https://assets.codepen.io/217233/ssBg.png");
+			  background-size: cover;
+			  background-position: center;
+			  height: 100vh;
+			  width: 100%;
+			  position: relative;
+			  transition: all 0.1s;
+			  position: relative;
+			}
