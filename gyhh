@@ -1,0 +1,27 @@
+ {
+		          name: "persistance",
+		          source: "https://assets.codepen.io/217233/persistance.wav",
+		          stackSize: 1
+		        },
+		        {
+		          name: "mercy",
+		          source: "https://assets.codepen.io/217233/mercy.wav",
+		          stackSize: 1
+		        },
+		        {
+		          name: "purchases",
+		          source: "https://assets.codepen.io/217233/pointlesspurchases.wav",
+		          stackSize: 1
+		        },
+		        {
+		          name: "fool",
+		          source: "https://assets.codepen.io/217233/fool.wav",
+		          stackSize: 1
+		        },
+		        {
+		          name: "notpossible",
+		          source: "https://assets.codepen.io/217233/not+possible.wav",
+		          stackSize: 1
+		        }
+		      ],
+		
