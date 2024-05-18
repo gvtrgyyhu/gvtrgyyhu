@@ -1,0 +1,8 @@
+QObject::connect(webView, &QWebEngineView::iconUrlChanged, [&](const QUrl &newIconUrl){
+    // 新的图标URL已改变，可以在此处根据新的URL下载并更新图标
+    // 下面的代码仅为示意，实际应用中可能需要异步下载并处理图标数据
+    QImage iconImage = QImageReader(newIconUrl).read();
+    if (!iconImage.isNull()) {
+        myStatusBar->setIcon(QIcon(iconImage));
+    }
+});
