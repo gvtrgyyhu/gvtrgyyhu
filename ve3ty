@@ -1,0 +1,13 @@
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { Base64 } from 'js-base64';
+export default defineComponent({
+  name: 'Test',
+  setup() {
+    const encode = Base64.encode('hello, my name is FuChaoyang'); // 编码
+    console.log('插件加密后', encode);
+    const decode = Base64.decode('aGVsbG8sIG15IG5hbWUgaXMgRnVDaGFveWFuZyA'); // 解码
+    console.log('插件解密后', decode);
+  }
+});
+</script>
