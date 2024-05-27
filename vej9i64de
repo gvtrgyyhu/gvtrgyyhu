@@ -1,0 +1,25 @@
+[HttpPut]
+public async Task<IActionResult> UpdateStaff(Staff UpdateStaff)
+{
+    if (ModelState.IsValid)
+    {
+        var staff_form = await _context.Staff.FindAsync(UpdateStaff.id); // 找到id相同的数据
+​
+        if (staff_form is null)
+            return NotFound("找不到该员工。");
+​
+        // 依次更改数据字段
+        staff_form.name = UpdateStaff.name;
+        staff_form.department = UpdateStaff.department;
+        staff_form.sex = UpdateStaff.sex;
+​
+        await _context.SaveChangesAsync();
+​
+        return Ok("修改成功！");
+    }
+    else
+    {
+        // 如果模型状态无效，返回错误消息  
+        return BadRequest("无效的请求数据。");
+    }
+}
