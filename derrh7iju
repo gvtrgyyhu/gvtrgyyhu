@@ -1,0 +1,17 @@
+<?php  
+include('flag.php');  
+$FLAG_md5 = md5($FLAG);  
+if(!isset($_GET['md5']) || !isset($_GET['value']))  
+{    highlight_file(__FILE__);  
+    die($FLAG_md5);  
+}  
+  
+$value = $_GET['value'];  
+$md5 = $_GET['md5'];  
+$time = time();  
+  
+if(md5($FLAG.$value.$time)===$md5)  
+{  
+    echo "yes, give you flag: ";  
+    echo $FLAG;  
+}
