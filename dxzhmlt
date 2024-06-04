@@ -1,0 +1,8 @@
+# 新建文件夹 open-webui 和 子目录
+mkdir -p /volume1/docker/open-webui/data
+
+# 进入 open-webui 目录
+cd /volume1/docker/open-webui
+
+# 拉取镜像
+docker pull ghcr.io/open-webui/open-webui:main
