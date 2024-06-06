@@ -1,0 +1,8 @@
+@Configuration
+@ConditionalOnClass(RedisOperations.class)
+public class RedisConfig {
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        // 创建 RedisTemplate 对象
+    }
+}
