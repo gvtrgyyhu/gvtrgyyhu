@@ -1,0 +1,22 @@
+    if (tb.Rows.Count == 2)
+                        {
+                            for (int j = 0; j < ReaderData.GetLength(1); j++)
+                            {
+                                string _fieldname = ReaderData[0, j].ToString();
+                                tb.Rows[0].Cells[j].InnerText = _fieldname;
+                            }
+                        }
+                    }
+                    int startRowID = tb.Rows.Count - 1;
+                    int copyRowID = 0;
+                    if (ft == FillType.StaticRows)
+                    {
+                        if (HasTitle == true)
+                        {
+                            startRowID = tb.Rows.Count > 1 ? 1 : 0;
+                        }
+                        else
+                        {
+                            startRowID = 0;
+                        }
+                    }
