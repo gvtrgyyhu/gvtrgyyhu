@@ -1,0 +1,18 @@
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            if (!_heroService.DeleteHerosByID(id))
+            {
+                return NotFound();
+            }
+ 
+            return Ok(new
+            {
+                message = "Super Hero Deleted Successfully!!!",
+                id = id
+            });
+        }
+    }
+}
