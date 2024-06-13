@@ -1,0 +1,68 @@
+ 
+void CenterMan::parseDeciceRecv(QByteArray msg_ba)
+{
+#define     OUT_BUFF_SIZE   1500
+#define     IN_BUFF_SIZE       1500
+    u8 head[]={0xAA, 0x55}, *pBuff=NULL, *pData=NULL;
+    u8 pack_num=0, cmd_type=0;
+    u32 app_id, curr_dev_sn, next_dev_sn, parent_sn;
+    u16 in_len, out_len, crcValue, data_len=0;
+    u8 out_buff[OUT_BUFF_SIZE]={0}, in_buff[IN_BUFF_SIZE]={0};
+ 
+ 
+    if( (pBuff=drv_com.memstr((u8*)msg_ba.data(), msg_ba.size(), head, 2)) != NULL )
+    {
+        ServerHeadStruct *pSeverHead=(ServerHeadStruct*)pBuff;
+        crcValue=pSeverHead->crc_h<<8|pSeverHead->crc_l;
+        data_len=pSeverHead->data_len_h<<8|pSeverHead->data_len_l;
+ 
+        pData=pBuff+8;//指到app_id地址
+        if(data_len<8 ||  crcValue != drv_com.crc16(pData, data_len))//CRC校验
+        {
+            qDebug("deviceRecvProcess: crc error!\n");
+            return;
+        }
+        app_id=pData[0]<<24|pData[1]<<16|pData[2]<<8|pData[3];
+        pData+=4;
+        curr_dev_sn=pData[0]<<24|pData[1]<<16|pData[2]<<8|pData[3];
+        parent_sn=0;
+        pData+=4;//指向数据区
+//        qDebug("deviceRecvProcess: app_id=%u, gw_sn=%08X", app_id, curr_dev_sn);
+        if(app_id==0 || curr_dev_sn==0)
+        {
+            qDebug("deviceRecvProcess error: app_id==0 || curr_dev_sn==0");
+            return;
+        }
+ 
+        in_len=data_len-8;//加密数据长度
+        if(in_len>IN_BUFF_SIZE)//数据包过长
+        {
+            qDebug("deviceRecvProcess error: in_len>DATA_BUFF_SIZE, in_len=%d", in_len);
+            return;
+        }
+        memcpy(in_buff, pData, in_len);//复制数据
+        u8 deep_counts=1;
+ 
+ 
+        
+        while(curr_dev_sn>0)
+        {
+            u8 encrypt_mode=ENCRYPT_MODE_DISABLE;
+            u8 encrypt_index=0;
+            u8 passwd_buff[20]={0};
+            if(deep_counts==1)//网关设备
+            {
+                encrypt_index=pSeverHead->encrypt_index;//密码索引
+                encrypt_mode=takeDevicePasswd(curr_dev_sn, encrypt_index, passwd_buff);//获取该设备的通讯密码
+            } 
+ 
+            switch(encrypt_mode)
+            {
+                case ENCRYPT_MODE_DISABLE: //不加密
+                {
+                    out_len=in_len;
+                    if(out_len>OUT_BUFF_SIZE)
+                        out_len=0;
+                    memcpy(out_buff, in_buff, in_len);
+                    break;
+                }
