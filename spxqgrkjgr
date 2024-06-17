@@ -1,0 +1,24 @@
+<!-- 商品详情 -->
+<image class="proImgDetail" src="{{imgUrl}}/upload/20220608/prodetailImg.png" lazy-load="true"></image>
+
+<view style="height:56rpx;"></view>
+
+<view class="productDetailTable" wx:if="{{spuList.length>0}}">
+
+  <view wx:if="{{!isShowDetail}}">
+    <view class="productTableTr">
+      <view class="leftTr">
+        <view class="little leftTrText">{{spuList[0].name}}</view>
+      </view>
+      <view class="rightTr little">{{spuList[0].content}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{isShowDetail}}" class="productTableTr" wx:for="{{spuList}}">
+    <view class="leftTr">
+      <view class="little leftTrText">{{item.name}}</view>
+    </view>
+    <view class="rightTr little">{{item.content}}</view>
+  </view>
+
+</view>
