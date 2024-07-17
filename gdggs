@@ -1,0 +1,85 @@
+import os  
+from random import randint  
+import pygame  
+from pygame.locals import *  
+from pygame.time import delay  
+from dissipate.img import img_basic  
+from dissipate.sounds import Sounds, play_sound  
+from dissipate.sprites import Board, Element  
+  
+  
+class Manager:  
+    """Game manager."""  
+    # 游戏屏幕的大小设置为900x600像素  
+    __screen_size = (900, 600)  
+    # 使用pygame库设置屏幕模式，DOUBLEBUF是双缓冲，32是位深度  
+    screen = pygame.display.set_mode(__screen_size, DOUBLEBUF, 32)  
+    # 砖块的大小设置为50x50像素  
+    __brick_size = 50  
+    # 加载背景图片并转换为优化格式  
+    __bg = pygame.image.load(os.path.join(img_basic, 'bg.png')).convert()  
+    # 停止宽度，可能用于游戏结束或暂停的界面  
+    stop_width = 63  
+    # 当前选中的砖块位置，格式为[row, col]  
+    selected = [-1, -1]  
+    # 交换标志，可能用于交换砖块或游戏逻辑  
+    swap_sign = -1  
+    # 上一次选中的砖块位置，格式为[row, col]  
+    last_sel = [-1, -1]  
+    # 是否交换的标志，用于判断是否发生了交换  
+    value_swapped = False  
+    # 死亡地图的标志，可能用于显示或隐藏死亡相关的游戏元素  
+    death_sign = True  
+    # 消除4个砖块时选中的位置，格式为[row, col]  
+    boom_sel = [-1, -1]  
+    # 当前关卡，0表示树（可能是特殊关卡或菜单）  
+    level = 0  
+    # 玩家的金钱数量  
+    money = 100  
+    # 能量点数  
+    energy_num = 30  
+    # 数字标志，可能用于显示或隐藏数字相关的游戏元素  
+    num_sign = True  
+    # 游戏类型，0为进行中，1为通过，-1为失败，2为树  
+    type = 2  
+    # 是否重置布局的标志  
+    reset_mode = True  
+    # 每个关卡的初始步数  
+    init_step = 15  
+    # 当前游戏剩余的步数  
+    step = init_step  
+    # 玩家的得分  
+    score = 0  
+    # 中等得分的两个阈值  
+    min = 20  
+    max = 50  
+    # 已消除动物的数量列表，长度为6，可能代表6种不同的动物  
+    animal_num = [0, 0, 0, 0, 0, 0]  
+    # 剩余需要消除的冰块数量  
+    ice_num = 0  
+    # 成功板，继承自Board类，位置在[200, 0]  
+    success_board = Board(Board.success, [200, 0])  
+    # 失败板，继承自Board类，位置在[200, 0]  
+    fail_board = Board(Board.fail, [200, 0])  
+    # 游戏网格的高度和宽度，都是9  
+    height, width = 9, 9  
+    # 选中的行和列，初始值为5  
+    row, col = 5, 5  
+    # 冰块列表，21x21的二维列表，-1表示无冰块，1表示有冰块  
+    ice_list = [[-1 for _ in range(21)] for _ in range(21)]  
+    # 动物列表，21x21的二维列表，-2表示已消除，-1表示无动物，0-4表示不同的动物  
+    animal = [[-1 for _ in range(21)] for _ in range(21)]  
+    # 砖块的x和y位置列表，用于确定砖块在屏幕上的位置  
+    list_x, list_y = (__screen_size[0] - 11 * __brick_size) / 2, (__screen_size[1] - 11 * __brick_size) / 2  
+  
+    def __init__(self, width, height):  
+        self.height = height  
+        self.width = width  
+        self.list_x = (Manager.__screen_size[0] - self.width * Manager.__brick_size) / 2  
+        self.list_y = (Manager.__screen_size[1] - self.height * Manager.__brick_size) / 2  
+        self.row, self.col = Manager.xy_rc(self.list_x, self.list_y)  
+        self.list_x, self.list_y = Manager.rc_xy(self.row, self.col)  
+        self.ice_list = [[-1 for _ in range(21)] for _ in range(21)]  
+        self.animal = [[-1 for _ in range(21)] for _ in range(21)]  
+        self.reset_animals()  
+  
